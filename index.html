@@ -82,10 +82,6 @@
             cursor: pointer;
         }
 
-        .login-btn:active {
-            background: #800000;
-        }
-
         .error-msg {
             color: red;
             margin-top: 12px;
@@ -267,7 +263,7 @@
             border-right: 1px solid #b30000;
             font-size: 3mm;
             padding: 1mm 2mm;
-            height: 5.8mm; /* Fixed row height to maintain 32 rows */
+            height: 5.8mm;
             box-sizing: border-box;
         }
 
@@ -329,20 +325,18 @@
 
     <!-- 2. MAIN BILLING APP SCREEN -->
     <div id="mainApp">
-
-        <!-- Input Form Section (Hidden when Printing) -->
         <div class="no-print">
             <h2 style="color: #b30000; margin-top:0;">Hemraj Electricals - Bill Entry</h2>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 2;">
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 2; min-width: 200px;">
                     <label>Customer Name:</label>
                     <input type="text" id="custName" placeholder="Enter Customer Name" oninput="generateBill()">
                 </div>
-                <div class="form-group" style="flex: 2;">
+                <div class="form-group" style="flex: 2; min-width: 200px;">
                     <label>Customer Address:</label>
                     <input type="text" id="custAddress" placeholder="Enter Customer Address" oninput="generateBill()">
                 </div>
-                <div class="form-group" style="flex: 1.5;">
+                <div class="form-group" style="flex: 1.5; min-width: 150px;">
                     <label>Date:</label>
                     <input type="date" id="billDate" onchange="generateBill()">
                 </div>
@@ -384,31 +378,29 @@ GW 9W Bulb    12    32.5
             <button class="btn" style="width: 100%; background-color: #0275d8; font-size: 16px; padding: 12px;" onclick="printPDF()">Print / Save PDF</button>
         </div>
 
-        <!-- Generated Bill Pages Container -->
         <div id="pagesContainer"></div>
-
     </div>
 
     <script>
-        // --- LOGIN LOGIC ---
+        // Set today's date by default
+        document.getElementById('billDate').valueAsDate = new Date();
+
         function handleLogin(event) {
             event.preventDefault();
             var user = document.getElementById('usernameInput').value.trim();
             var pass = document.getElementById('passwordInput').value.trim();
             var errorDiv = document.getElementById('errorText');
 
+            // अचूक युजरनेम HE आणि पासवर्ड HemrajEle
             if (user === "HE" && pass === "HemrajEle") {
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 errorDiv.style.display = 'none';
-                generateBill();
+                generateBill(); // बिल लगेच लोड होईल
             } else {
                 errorDiv.style.display = 'block';
             }
         }
-
-        // --- BILL GENERATION LOGIC ---
-        document.getElementById('billDate').valueAsDate = new Date();
 
         function addRow() {
             const tbody = document.getElementById('inputRows');
@@ -589,4 +581,5 @@ GW 9W Bulb    12    32.5
                 pagesHTML += `
                     <div class="page-container">
                         <div class="header">
-                            <div class="god
+                            <div class="god-blessing">|| Shri Gangamauli Prasanna || Shri Mauli Pavnadevi Prasanna ||</div>
+                            <di
