@@ -3,66 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hemraj Electricals - Billing App</title>
+    <title>Hemraj Electricals - Bill Generator</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #f4f4f4; color: #333; }
-        
-        /* Login Screen */
-        #loginBox { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #2d2d2d; }
-        .login-card { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 360px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; }
-        .login-card h2 { color: #b30000; margin-bottom: 8px; }
-        .login-card p { color: #666; font-size: 14px; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-size: 13px; margin-bottom: 5px; color: #444; }
-        .input-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; outline: none; }
-        .login-btn { width: 100%; padding: 12px; background: #b30000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .error-msg { color: red; margin-top: 10px; font-size: 14px; display: none; }
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-        /* Billing App Screen */
-        #billingApp { display: none; padding: 15px; max-width: 800px; margin: 0 auto; background: white; min-height: 100vh; }
-        .shop-header { text-align: center; border-bottom: 2px solid #b30000; padding-bottom: 10px; margin-bottom: 15px; }
-        .shop-header h1 { color: #b30000; font-size: 22px; }
-        .shop-header p { font-size: 13px; color: #555; }
-        
-        .customer-details { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; background: #f9f9f9; padding: 10px; border-radius: 6px; }
-        .customer-details input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; width: 100%; }
+        body {
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 13px; }
-        th { background-color: #b30000; color: white; }
-        input.table-input { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
-        
-        .btn { padding: 10px 15px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: bold; }
-        .btn-add { background: #28a745; color: white; width: 100%; margin-bottom: 15px; }
-        .btn-print { background: #007bff; color: white; width: 100%; }
-        .btn-delete { background: #dc3545; color: white; padding: 5px 8px; }
+        /* --- Login Screen Styling --- */
+        #loginBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #2d2d2d;
+            padding: 20px;
+        }
 
-        .total-section { text-align: right; font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #b30000; }
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-card h2 {
+            color: #b30000;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .login-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .login-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .login-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #b30000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:active {
+            background: #800000;
+        }
+
+        .error-msg {
+            color: red;
+            margin-top: 12px;
+            font-size: 14px;
+            display: none;
+            font-weight: bold;
+        }
+
+        /* --- Main App Screen Styling --- */
+        #mainApp {
+            display: none;
+            padding: 20px;
+        }
+
+        /* Input Form Controls - Screen Only */
+        .no-print {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 120px;
+            font-family: monospace;
+        }
+
+        table.input-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        table.input-table th, table.input-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .btn {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-add {
+            background-color: #5cb85c;
+            margin-bottom: 15px;
+        }
+
+        .btn-clear {
+            background-color: #f0ad4e;
+            margin-left: 10px;
+        }
+
+        /* Print Layout Rules */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
 
         @media print {
-            body { background: white; }
-            #loginBox, .btn-add, .btn-print, .btn-delete, .no-print { display: none !important; }
-            #billingApp { display: block !important; padding: 0; width: 100%; }
-            input { border: none; background: transparent; }
+            body {
+                background: none;
+                padding: 0;
+            }
+            #loginBox, .no-print {
+                display: none !important;
+            }
+            #mainApp {
+                display: block !important;
+                padding: 0;
+            }
+            .page-container {
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Invoice Sheet Styling */
+        .page-container {
+            width: 210mm;
+            height: 297mm;
+            padding: 8mm;
+            margin: 0 auto 20px auto;
+            background: white;
+            border: 2px solid #b30000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #b30000;
+            padding-bottom: 5px;
+        }
+
+        .god-blessing {
+            font-size: 2.5mm;
+            font-weight: bold;
+            color: #b30000;
+            margin-bottom: 2mm;
+        }
+
+        .memo-title {
+            font-size: 3.5mm;
+            font-weight: bold;
+            color: #b30000;
+            letter-spacing: 1px;
+        }
+
+        .shop-title {
+            font-size: 6mm;
+            font-weight: bold;
+            color: #b30000;
+            margin: 1mm 0;
+        }
+
+        .shop-address {
+            font-size: 3mm;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .customer-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 3.2mm;
+            font-weight: bold;
+            margin: 3mm 0;
+            border-bottom: 1.5px solid #b30000;
+            padding-bottom: 3mm;
+        }
+
+        /* Invoice Main Table */
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex-grow: 1;
+        }
+
+        .bill-table th {
+            border: 1px solid #b30000;
+            color: #b30000;
+            font-size: 3mm;
+            padding: 1.5mm;
+            text-align: center;
+        }
+
+        .bill-table td {
+            border-left: 1px solid #b30000;
+            border-right: 1px solid #b30000;
+            font-size: 3mm;
+            padding: 1mm 2mm;
+            height: 5.8mm; /* Fixed row height to maintain 32 rows */
+            box-sizing: border-box;
+        }
+
+        .col-sr { width: 8%; text-align: center; }
+        .col-desc { width: 52%; text-align: left; }
+        .col-qty { width: 10%; text-align: center; }
+        .col-rate { width: 13%; text-align: right; }
+        .col-amt { width: 17%; text-align: right; }
+
+        .bill-table tr.total-row td {
+            border-top: 1px solid #b30000;
+            border-bottom: 1px solid #b30000;
+            font-weight: bold;
+            font-size: 3mm;
+            height: 6mm;
+        }
+
+        /* Footer / Signatures */
+        .footer {
+            margin-top: 4mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 3.2mm;
+            font-weight: bold;
+            padding: 0 4mm;
+        }
+
+        .sig-box {
+            text-align: center;
+        }
+
+        .sig-space {
+            height: 12mm;
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Screen -->
+    <!-- 1. LOGIN SCREEN -->
     <div id="loginBox">
         <div class="login-card">
             <h2>Hemraj Electricals</h2>
             <p>Please login to access billing</p>
             <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="input-group">
+                <div class="login-group">
                     <label>Username</label>
-                    <input type="text" id="usernameInput" placeholder="Enter username" required autocomplete="off">
+                    <input type="text" id="usernameInput" placeholder="Username" required autocomplete="off">
                 </div>
-                <div class="input-group">
+                <div class="login-group">
                     <label>Password</label>
-                    <input type="password" id="passwordInput" placeholder="Enter password" required>
+                    <input type="password" id="passwordInput" placeholder="Password" required>
                 </div>
                 <button type="submit" class="login-btn">Login</button>
                 <div id="errorText" class="error-msg">युजरनेम किंवा पासवर्ड चुकीचा आहे!</div>
@@ -70,51 +327,70 @@
         </div>
     </div>
 
-    <!-- Main Billing App -->
-    <div id="billingApp">
-        <div class="shop-header">
-            <h1>HEMRAJ ELECTRICALS</h1>
-            <p>A/P. Phondaghat | All Kinds of Electrical Goods & Wiring Materials</p>
+    <!-- 2. MAIN BILLING APP SCREEN -->
+    <div id="mainApp">
+
+        <!-- Input Form Section (Hidden when Printing) -->
+        <div class="no-print">
+            <h2 style="color: #b30000; margin-top:0;">Hemraj Electricals - Bill Entry</h2>
+            <div style="display: flex; gap: 20px;">
+                <div class="form-group" style="flex: 2;">
+                    <label>Customer Name:</label>
+                    <input type="text" id="custName" placeholder="Enter Customer Name" oninput="generateBill()">
+                </div>
+                <div class="form-group" style="flex: 2;">
+                    <label>Customer Address:</label>
+                    <input type="text" id="custAddress" placeholder="Enter Customer Address" oninput="generateBill()">
+                </div>
+                <div class="form-group" style="flex: 1.5;">
+                    <label>Date:</label>
+                    <input type="date" id="billDate" onchange="generateBill()">
+                </div>
+            </div>
+
+            <!-- Bulk Paste Box -->
+            <div class="form-group">
+                <label>⚡ Bulk Items Paste Box (Description, Qty, Rate एका ओळीत टाका):</label>
+                <textarea id="bulkPasteArea" placeholder="उदा:
+GW 9W Bulb    12    32.5
+2.5 Havells    60    27.5" oninput="parseBulkAndGenerate()"></textarea>
+                <button class="btn btn-clear" style="margin-top: 5px;" onclick="clearBulk()">Clear Box</button>
+            </div>
+
+            <details>
+                <summary style="cursor: pointer; font-weight: bold; color: #b30000; margin-bottom: 10px;">किंवा मॅन्युअली एक-एक आयटम भरा/तपासा (Manual Table)</summary>
+                <table class="input-table" id="itemsInputTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Particulars / Item Description</th>
+                            <th style="width: 15%;">Qty</th>
+                            <th style="width: 20%;">Rate (₹)</th>
+                            <th style="width: 15%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputRows">
+                        <tr>
+                            <td><input type="text" class="item-desc" placeholder="Item Name" oninput="generateBill()"></td>
+                            <td><input type="number" class="item-qty" placeholder="0" oninput="generateBill()"></td>
+                            <td><input type="number" class="item-rate" placeholder="0.00" oninput="generateBill()"></td>
+                            <td><button class="btn" onclick="removeRow(this)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-add" onclick="addRow()">+ Add Item</button>
+            </details>
+
+            <br><br>
+            <button class="btn" style="width: 100%; background-color: #0275d8; font-size: 16px; padding: 12px;" onclick="printPDF()">Print / Save PDF</button>
         </div>
 
-        <div class="customer-details">
-            <input type="text" id="custName" placeholder="ग्राहकाचे नाव (Customer Name)">
-            <input type="text" id="custPhone" placeholder="मोबाईल नंबर (Phone Number)">
-        </div>
+        <!-- Generated Bill Pages Container -->
+        <div id="pagesContainer"></div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>अ.नं.</th>
-                    <th>तपशील (Item)</th>
-                    <th>नग (Qty)</th>
-                    <th>दर (Rate)</th>
-                    <th>एकूण (Total)</th>
-                    <th class="no-print">कृती</th>
-                </tr>
-            </thead>
-            <tbody id="billItems">
-                <tr>
-                    <td>1</td>
-                    <td><input type="text" class="table-input" placeholder="सामानाचे नाव"></td>
-                    <td><input type="number" class="table-input qty" value="1" oninput="calculateTotal()"></td>
-                    <td><input type="number" class="table-input rate" value="0" oninput="calculateTotal()"></td>
-                    <td class="item-total">0</td>
-                    <td class="no-print"><button class="btn btn-delete" onclick="deleteRow(this)">X</button></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <button class="btn btn-add no-print" onclick="addRow()">+ नवीन ओळ जोडा (Add Item)</button>
-
-        <div class="total-section">
-            एकूण रक्कम (Grand Total): ₹ <span id="grandTotal">0</span>
-        </div>
-
-        <button class="btn btn-print no-print" onclick="window.print()">बिल प्रिंट करा / PDF सेव्ह करा (Print Bill)</button>
     </div>
 
     <script>
+        // --- LOGIN LOGIC ---
         function handleLogin(event) {
             event.preventDefault();
             var user = document.getElementById('usernameInput').value.trim();
@@ -123,54 +399,194 @@
 
             if (user === "HE" && pass === "HemrajEle") {
                 document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('billingApp').style.display = 'block';
+                document.getElementById('mainApp').style.display = 'block';
+                errorDiv.style.display = 'none';
+                generateBill();
             } else {
                 errorDiv.style.display = 'block';
             }
         }
 
+        // --- BILL GENERATION LOGIC ---
+        document.getElementById('billDate').valueAsDate = new Date();
+
         function addRow() {
-            var table = document.getElementById('billItems');
-            var rowCount = table.rows.length + 1;
-            var row = table.insertRow();
-            row.innerHTML = `
-                <td>${rowCount}</td>
-                <td><input type="text" class="table-input" placeholder="सामानाचे नाव"></td>
-                <td><input type="number" class="table-input qty" value="1" oninput="calculateTotal()"></td>
-                <td><input type="number" class="table-input rate" value="0" oninput="calculateTotal()"></td>
-                <td class="item-total">0</td>
-                <td class="no-print"><button class="btn btn-delete" onclick="deleteRow(this)">X</button></td>
+            const tbody = document.getElementById('inputRows');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="item-desc" placeholder="Item Name" oninput="generateBill()"></td>
+                <td><input type="number" class="item-qty" placeholder="0" oninput="generateBill()"></td>
+                <td><input type="number" class="item-rate" placeholder="0.00" oninput="generateBill()"></td>
+                <td><button class="btn" onclick="removeRow(this)">Delete</button></td>
             `;
-            updateRowNumbers();
+            tbody.appendChild(tr);
+            generateBill();
         }
 
-        function deleteRow(btn) {
-            var row = btn.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-            updateRowNumbers();
-            calculateTotal();
-        }
-
-        function updateRowNumbers() {
-            var table = document.getElementById('billItems');
-            for (var i = 0; i < table.rows.length; i++) {
-                table.rows[i].cells[0].innerText = i + 1;
+        function removeRow(btn) {
+            const row = btn.parentNode.parentNode;
+            if(document.querySelectorAll('#inputRows tr').length > 1) {
+                row.parentNode.removeChild(row);
+                generateBill();
             }
         }
 
-        function calculateTotal() {
-            var table = document.getElementById('billItems');
-            var grandTotal = 0;
-            for (var i = 0; i < table.rows.length; i++) {
-                var row = table.rows[i];
-                var qty = parseFloat(row.querySelector('.qty').value) || 0;
-                var rate = parseFloat(row.querySelector('.rate').value) || 0;
-                var total = qty * rate;
-                row.querySelector('.item-total').innerText = total.toFixed(2);
-                grandTotal += total;
-            }
-            document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+        function clearBulk() {
+            document.getElementById('bulkPasteArea').value = '';
+            generateBill();
         }
-    </script>
-</body>
-</html>
+
+        function parseBulkAndGenerate() {
+            const text = document.getElementById('bulkPasteArea').value;
+            const lines = text.split('\n');
+            
+            let tbody = document.getElementById('inputRows');
+            tbody.innerHTML = ''; 
+
+            let hasValidRows = false;
+
+            lines.forEach(line => {
+                let trimmed = line.trim();
+                if (trimmed !== '') {
+                    let tokens = trimmed.split(/\s+/);
+                    
+                    if (tokens.length >= 3) {
+                        let rate = tokens.pop();
+                        let qty = tokens.pop();
+                        let desc = tokens.join(' ');
+
+                        addManualRow(desc, qty, rate);
+                        hasValidRows = true;
+                    } else if (tokens.length === 2) {
+                        let qty = tokens.pop();
+                        let desc = tokens.join(' ');
+                        addManualRow(desc, qty, '');
+                        hasValidRows = true;
+                    } else {
+                        addManualRow(trimmed, '', '');
+                        hasValidRows = true;
+                    }
+                }
+            });
+
+            if (!hasValidRows) {
+                addManualRow('', '', '');
+            }
+            generateBill();
+        }
+
+        function addManualRow(desc, qty, rate) {
+            const tbody = document.getElementById('inputRows');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" class="item-desc" value="${desc}" placeholder="Item Name" oninput="generateBill()"></td>
+                <td><input type="number" class="item-qty" value="${qty}" placeholder="0" oninput="generateBill()"></td>
+                <td><input type="number" class="item-rate" value="${rate}" placeholder="0.00" oninput="generateBill()"></td>
+                <td><button class="btn" onclick="removeRow(this)">Delete</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function generateBill() {
+            const nameInput = document.getElementById('custName').value.trim();
+            const addrInput = document.getElementById('custAddress').value.trim();
+            
+            let custNameDisplay = nameInput !== "" ? nameInput : "........................................";
+            let custAddressDisplay = addrInput !== "" ? addrInput : "........................................";
+            let fullCustString = nameInput !== "" ? (addrInput !== "" ? `${nameInput} - ${addrInput}` : nameInput) : "";
+
+            const rawDate = document.getElementById('billDate').value;
+            let formattedDate = "";
+            if (rawDate) {
+                const d = new Date(rawDate);
+                formattedDate = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+            }
+
+            const descs = document.getElementsByClassName('item-desc');
+            const qtys = document.getElementsByClassName('item-qty');
+            const rates = document.getElementsByClassName('item-rate');
+
+            let items = [];
+            let grandTotal = 0;
+
+            for (let i = 0; i < descs.length; i++) {
+                let desc = descs[i].value.trim();
+                let qty = parseFloat(qtys[i].value) || 0;
+                let rate = parseFloat(rates[i].value) || 0;
+                let amount = qty * rate;
+
+                if (desc !== "" || qty > 0 || rate > 0) {
+                    items.push({
+                        sr: items.length + 1,
+                        desc: desc,
+                        qty: qty || "",
+                        rate: rate ? rate.toFixed(2) : "",
+                        amount: amount ? amount.toFixed(2) : ""
+                    });
+                    grandTotal += amount;
+                }
+            }
+
+            if(fullCustString !== "") {
+                document.title = fullCustString + ".pdf";
+            } else {
+                document.title = "Hemraj Electricals Bill.pdf";
+            }
+
+            const rowsPerPage = 32;
+            let totalPages = Math.ceil(items.length / rowsPerPage) || 1;
+            let pagesHTML = "";
+
+            for (let p = 0; p < totalPages; p++) {
+                let pageItems = items.slice(p * rowsPerPage, (p + 1) * rowsPerPage);
+                let pageTotal = 0;
+
+                let tableRowsHTML = "";
+
+                for (let i = 0; i < rowsPerPage; i++) {
+                    if (i < pageItems.length) {
+                        let item = pageItems[i];
+                        let amtVal = parseFloat(item.amount) || 0;
+                        pageTotal += amtVal;
+                        tableRowsHTML += `
+                            <tr>
+                                <td class="col-sr">${item.sr}</td>
+                                <td class="col-desc">${item.desc}</td>
+                                <td class="col-qty">${item.qty}</td>
+                                <td class="col-rate">${item.rate}</td>
+                                <td class="col-amt">${item.amount}</td>
+                            </tr>
+                        `;
+                    } else {
+                        tableRowsHTML += `
+                            <tr>
+                                <td class="col-sr"></td>
+                                <td class="col-desc"></td>
+                                <td class="col-qty"></td>
+                                <td class="col-rate"></td>
+                                <td class="col-amt"></td>
+                            </tr>
+                        `;
+                    }
+                }
+
+                let summaryRowsHTML = `
+                    <tr class="total-row">
+                        <td colspan="4" style="text-align: right;">PAGE TOTAL:</td>
+                        <td class="col-amt">${pageTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+
+                if (p === totalPages - 1) {
+                    summaryRowsHTML += `
+                        <tr class="total-row">
+                            <td colspan="4" style="text-align: right; color: #b30000;">GRAND TOTAL:</td>
+                            <td class="col-amt" style="color: #b30000;">₹ ${grandTotal.toFixed(2)}</td>
+                        </tr>
+                    `;
+                }
+
+                pagesHTML += `
+                    <div class="page-container">
+                        <div class="header">
+                            <div class="god
