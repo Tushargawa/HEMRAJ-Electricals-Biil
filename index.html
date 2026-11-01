@@ -5,300 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hemraj Electricals - Bill Generator</title>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f0f0f0; margin: 0; padding: 0; }
 
-        body {
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+        /* Login Screen */
+        #loginBox { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #2d2d2d; padding: 20px; }
+        .login-card { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; }
+        .login-card h2 { color: #b30000; margin-top: 0; margin-bottom: 8px; }
+        .login-card p { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .login-group { margin-bottom: 15px; text-align: left; }
+        .login-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #333; }
+        .login-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; outline: none; }
+        .login-btn { width: 100%; padding: 12px; background: #b30000; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .error-msg { color: red; margin-top: 12px; font-size: 14px; display: none; font-weight: bold; }
 
-        /* --- Login Screen Styling --- */
-        #loginBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #2d2d2d;
-            padding: 20px;
-        }
+        /* Main App Screen */
+        #mainApp { display: none; padding: 20px; }
+        .no-print { background: #fff; padding: 20px; border-radius: 8px; max-width: 900px; margin: 0 auto 20px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { resize: vertical; height: 120px; font-family: monospace; }
+        table.input-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        table.input-table th, table.input-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .btn { background-color: #d9534f; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-add { background-color: #5cb85c; margin-bottom: 15px; }
+        .btn-clear { background-color: #f0ad4e; margin-left: 10px; }
 
-        .login-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        .login-card h2 {
-            color: #b30000;
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
-
-        .login-card p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .login-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .login-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .login-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #b30000;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .error-msg {
-            color: red;
-            margin-top: 12px;
-            font-size: 14px;
-            display: none;
-            font-weight: bold;
-        }
-
-        /* --- Main App Screen Styling --- */
-        #mainApp {
-            display: none;
-            padding: 20px;
-        }
-
-        /* Input Form Controls - Screen Only */
-        .no-print {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 900px;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        textarea {
-            resize: vertical;
-            height: 120px;
-            font-family: monospace;
-        }
-
-        table.input-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-
-        table.input-table th, table.input-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .btn {
-            background-color: #d9534f;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .btn-add {
-            background-color: #5cb85c;
-            margin-bottom: 15px;
-        }
-
-        .btn-clear {
-            background-color: #f0ad4e;
-            margin-left: 10px;
-        }
-
-        /* Print Layout Rules */
-        @page {
-            size: A4 portrait;
-            margin: 0;
-        }
-
+        /* Print Rules */
+        @page { size: A4 portrait; margin: 0; }
         @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            #loginBox, .no-print {
-                display: none !important;
-            }
-            #mainApp {
-                display: block !important;
-                padding: 0;
-            }
-            .page-container {
-                page-break-after: always;
-                page-break-inside: avoid;
-            }
+            body { background: none; padding: 0; }
+            #loginBox, .no-print { display: none !important; }
+            #mainApp { display: block !important; padding: 0; }
+            .page-container { page-break-after: always; page-break-inside: avoid; }
         }
 
-        /* Invoice Sheet Styling */
-        .page-container {
-            width: 210mm;
-            height: 297mm;
-            padding: 8mm;
-            margin: 0 auto 20px auto;
-            background: white;
-            border: 2px solid #b30000;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 0 10px rgba(0,0,0,0.15);
-        }
-
-        /* Header Styles */
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #b30000;
-            padding-bottom: 5px;
-        }
-
-        .god-blessing {
-            font-size: 2.5mm;
-            font-weight: bold;
-            color: #b30000;
-            margin-bottom: 2mm;
-        }
-
-        .memo-title {
-            font-size: 3.5mm;
-            font-weight: bold;
-            color: #b30000;
-            letter-spacing: 1px;
-        }
-
-        .shop-title {
-            font-size: 6mm;
-            font-weight: bold;
-            color: #b30000;
-            margin: 1mm 0;
-        }
-
-        .shop-address {
-            font-size: 3mm;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .customer-details {
-            display: flex;
-            justify-content: space-between;
-            font-size: 3.2mm;
-            font-weight: bold;
-            margin: 3mm 0;
-            border-bottom: 1.5px solid #b30000;
-            padding-bottom: 3mm;
-        }
-
-        /* Invoice Main Table */
-        .bill-table {
-            width: 100%;
-            border-collapse: collapse;
-            flex-grow: 1;
-        }
-
-        .bill-table th {
-            border: 1px solid #b30000;
-            color: #b30000;
-            font-size: 3mm;
-            padding: 1.5mm;
-            text-align: center;
-        }
-
-        .bill-table td {
-            border-left: 1px solid #b30000;
-            border-right: 1px solid #b30000;
-            font-size: 3mm;
-            padding: 1mm 2mm;
-            height: 5.8mm;
-            box-sizing: border-box;
-        }
-
+        .page-container { width: 210mm; height: 297mm; padding: 8mm; margin: 0 auto 20px auto; background: white; border: 2px solid #b30000; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 10px rgba(0,0,0,0.15); }
+        .header { text-align: center; border-bottom: 2px solid #b30000; padding-bottom: 5px; }
+        .god-blessing { font-size: 2.5mm; font-weight: bold; color: #b30000; margin-bottom: 2mm; }
+        .memo-title { font-size: 3.5mm; font-weight: bold; color: #b30000; letter-spacing: 1px; }
+        .shop-title { font-size: 6mm; font-weight: bold; color: #b30000; margin: 1mm 0; }
+        .shop-address { font-size: 3mm; font-weight: bold; color: #333; }
+        .customer-details { display: flex; justify-content: space-between; font-size: 3.2mm; font-weight: bold; margin: 3mm 0; border-bottom: 1.5px solid #b30000; padding-bottom: 3mm; }
+        .bill-table { width: 100%; border-collapse: collapse; flex-grow: 1; }
+        .bill-table th { border: 1px solid #b30000; color: #b30000; font-size: 3mm; padding: 1.5mm; text-align: center; }
+        .bill-table td { border-left: 1px solid #b30000; border-right: 1px solid #b30000; font-size: 3mm; padding: 1mm 2mm; height: 5.8mm; box-sizing: border-box; }
         .col-sr { width: 8%; text-align: center; }
         .col-desc { width: 52%; text-align: left; }
         .col-qty { width: 10%; text-align: center; }
         .col-rate { width: 13%; text-align: right; }
         .col-amt { width: 17%; text-align: right; }
-
-        .bill-table tr.total-row td {
-            border-top: 1px solid #b30000;
-            border-bottom: 1px solid #b30000;
-            font-weight: bold;
-            font-size: 3mm;
-            height: 6mm;
-        }
-
-        /* Footer / Signatures */
-        .footer {
-            margin-top: 4mm;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            font-size: 3.2mm;
-            font-weight: bold;
-            padding: 0 4mm;
-        }
-
-        .sig-box {
-            text-align: center;
-        }
-
-        .sig-space {
-            height: 12mm;
-        }
+        .bill-table tr.total-row td { border-top: 1px solid #b30000; border-bottom: 1px solid #b30000; font-weight: bold; font-size: 3mm; height: 6mm; }
+        .footer { margin-top: 4mm; display: flex; justify-content: space-between; align-items: flex-end; font-size: 3.2mm; font-weight: bold; padding: 0 4mm; }
+        .sig-box { text-align: center; }
+        .sig-space { height: 12mm; }
     </style>
 </head>
 <body>
@@ -308,18 +69,16 @@
         <div class="login-card">
             <h2>Hemraj Electricals</h2>
             <p>Please login to access billing</p>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="login-group">
-                    <label>Username</label>
-                    <input type="text" id="usernameInput" placeholder="Username" required autocomplete="off">
-                </div>
-                <div class="login-group">
-                    <label>Password</label>
-                    <input type="password" id="passwordInput" placeholder="Password" required>
-                </div>
-                <button type="submit" class="login-btn">Login</button>
-                <div id="errorText" class="error-msg">युजरनेम किंवा पासवर्ड चुकीचा आहे!</div>
-            </form>
+            <div class="login-group">
+                <label>Username</label>
+                <input type="text" id="usernameInput" placeholder="Username" autocomplete="off">
+            </div>
+            <div class="login-group">
+                <label>Password</label>
+                <input type="password" id="passwordInput" placeholder="Password">
+            </div>
+            <button type="button" class="login-btn" onclick="checkLogin()">Login</button>
+            <div id="errorText" class="error-msg">युजरनेम किंवा पासवर्ड चुकीचा आहे!</div>
         </div>
     </div>
 
@@ -342,7 +101,6 @@
                 </div>
             </div>
 
-            <!-- Bulk Paste Box -->
             <div class="form-group">
                 <label>⚡ Bulk Items Paste Box (Description, Qty, Rate एका ओळीत टाका):</label>
                 <textarea id="bulkPasteArea" placeholder="उदा:
@@ -353,7 +111,7 @@ GW 9W Bulb    12    32.5
 
             <details>
                 <summary style="cursor: pointer; font-weight: bold; color: #b30000; margin-bottom: 10px;">किंवा मॅन्युअली एक-एक आयटम भरा/तपासा (Manual Table)</summary>
-                <table class="input-table" id="itemsInputTable">
+                <table class="input-table">
                     <thead>
                         <tr>
                             <th style="width: 50%;">Particulars / Item Description</th>
@@ -375,28 +133,25 @@ GW 9W Bulb    12    32.5
             </details>
 
             <br><br>
-            <button class="btn" style="width: 100%; background-color: #0275d8; font-size: 16px; padding: 12px;" onclick="printPDF()">Print / Save PDF</button>
+            <button class="btn" style="width: 100%; background-color: #0275d8; font-size: 16px; padding: 12px;" onclick="window.print()">Print / Save PDF</button>
         </div>
 
         <div id="pagesContainer"></div>
     </div>
 
     <script>
-        // Set today's date by default
         document.getElementById('billDate').valueAsDate = new Date();
 
-        function handleLogin(event) {
-            event.preventDefault();
+        function checkLogin() {
             var user = document.getElementById('usernameInput').value.trim();
             var pass = document.getElementById('passwordInput').value.trim();
             var errorDiv = document.getElementById('errorText');
 
-            // अचूक युजरनेम HE आणि पासवर्ड HemrajEle
+            // युजरनेम HE आणि पासवर्ड HemrajEle
             if (user === "HE" && pass === "HemrajEle") {
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
-                errorDiv.style.display = 'none';
-                generateBill(); // बिल लगेच लोड होईल
+                generateBill();
             } else {
                 errorDiv.style.display = 'block';
             }
@@ -431,22 +186,18 @@ GW 9W Bulb    12    32.5
         function parseBulkAndGenerate() {
             const text = document.getElementById('bulkPasteArea').value;
             const lines = text.split('\n');
-            
             let tbody = document.getElementById('inputRows');
             tbody.innerHTML = ''; 
-
             let hasValidRows = false;
 
             lines.forEach(line => {
                 let trimmed = line.trim();
                 if (trimmed !== '') {
                     let tokens = trimmed.split(/\s+/);
-                    
                     if (tokens.length >= 3) {
                         let rate = tokens.pop();
                         let qty = tokens.pop();
                         let desc = tokens.join(' ');
-
                         addManualRow(desc, qty, rate);
                         hasValidRows = true;
                     } else if (tokens.length === 2) {
@@ -482,7 +233,6 @@ GW 9W Bulb    12    32.5
         function generateBill() {
             const nameInput = document.getElementById('custName').value.trim();
             const addrInput = document.getElementById('custAddress').value.trim();
-            
             let custNameDisplay = nameInput !== "" ? nameInput : "........................................";
             let custAddressDisplay = addrInput !== "" ? addrInput : "........................................";
             let fullCustString = nameInput !== "" ? (addrInput !== "" ? `${nameInput} - ${addrInput}` : nameInput) : "";
@@ -532,7 +282,6 @@ GW 9W Bulb    12    32.5
             for (let p = 0; p < totalPages; p++) {
                 let pageItems = items.slice(p * rowsPerPage, (p + 1) * rowsPerPage);
                 let pageTotal = 0;
-
                 let tableRowsHTML = "";
 
                 for (let i = 0; i < rowsPerPage; i++) {
@@ -582,4 +331,48 @@ GW 9W Bulb    12    32.5
                     <div class="page-container">
                         <div class="header">
                             <div class="god-blessing">|| Shri Gangamauli Prasanna || Shri Mauli Pavnadevi Prasanna ||</div>
-                            <di
+                            <div class="memo-title">CASH / CREDIT MEMO</div>
+                            <div class="shop-title">HEMRAJ ELECTRICALS</div>
+                            <div class="shop-address">A/P. Phondaghat - Bazar Peth, Tal. Kankavali. M.: 9422373221 / 7218412477</div>
+                        </div>
+
+                        <div class="customer-details">
+                            <div>M/s.: ${custNameDisplay} &nbsp;&nbsp; <b>Address:</b> ${custAddressDisplay}</div>
+                            <div>Date: ${formattedDate}</div>
+                        </div>
+
+                        <table class="bill-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-sr">Sr.</th>
+                                    <th class="col-desc">Particulars</th>
+                                    <th class="col-qty">Qty</th>
+                                    <th class="col-rate">Rate</th>
+                                    <th class="col-amt">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRowsHTML}
+                                ${summaryRowsHTML}
+                            </tbody>
+                        </table>
+
+                        <div class="footer">
+                            <div class="sig-box">
+                                <div class="sig-space"></div>
+                                <div>Customer Signature</div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="sig-space"></div>
+                                <div>for <b>HEMRAJ ELECTRICALS</b><br><span style="font-size: 2.8mm; font-weight: normal;">Authorized Signatory</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('pagesContainer').innerHTML = pagesHTML;
+        }
+    </script>
+</body>
+</html>
